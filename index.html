@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Colors &amp; Shapes for Kids!</title>
+  <title>Colors, Shapes &amp; Dino for Kids!</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -44,18 +44,15 @@
       50%       { transform: translateY(-8px); }
     }
 
-    .sub-title {
-      font-size: clamp(1.1rem, 4vw, 1.5rem);
-      color: #666;
-    }
+    .sub-title { font-size: clamp(1.1rem, 4vw, 1.5rem); color: #666; }
 
     /* ---- Home mode buttons ---- */
     .mode-btn {
       width: min(82vw, 290px);
-      padding: 24px 20px;
+      padding: 22px 20px;
       border: none;
       border-radius: 24px;
-      font-size: clamp(1.4rem, 5.5vw, 2rem);
+      font-size: clamp(1.3rem, 5vw, 1.85rem);
       font-family: inherit;
       font-weight: bold;
       color: #fff;
@@ -66,27 +63,16 @@
     }
     .mode-btn:active { transform: translateY(5px); }
     .mode-btn:hover  { transform: translateY(-4px); }
-    .mode-btn.colors-btn {
-      background: linear-gradient(135deg, #ff7043, #e53935);
-      box-shadow: 0 8px 0 #b71c1c;
-    }
-    .mode-btn.shapes-btn {
-      background: linear-gradient(135deg, #5c6bc0, #283593);
-      box-shadow: 0 8px 0 #1a237e;
-    }
+    .mode-btn.colors-btn { background: linear-gradient(135deg,#ff7043,#e53935); box-shadow: 0 8px 0 #b71c1c; }
+    .mode-btn.shapes-btn { background: linear-gradient(135deg,#5c6bc0,#283593); box-shadow: 0 8px 0 #1a237e; }
+    .mode-btn.dino-btn   { background: linear-gradient(135deg,#66bb6a,#2e7d32); box-shadow: 0 8px 0 #1b5e20; }
 
     /* ---- Score board ---- */
-    #score-board {
-      font-size: clamp(1rem, 3.5vw, 1.3rem);
-      color: #555;
-    }
+    #score-board { font-size: clamp(1rem, 3.5vw, 1.3rem); color: #555; }
     #score-board strong { color: #e91e63; }
 
     /* ---- Question ---- */
-    #question {
-      font-size: clamp(1.3rem, 5vw, 2rem);
-      color: #333;
-    }
+    #question { font-size: clamp(1.3rem, 5vw, 2rem); color: #333; }
 
     /* ---- Display area ---- */
     #display-area {
@@ -100,7 +86,6 @@
       25%       { transform: scale(1.05) rotate(3deg); }
       75%       { transform: scale(1.05) rotate(-3deg); }
     }
-
     #color-blob {
       width: clamp(120px, 28vw, 200px);
       height: clamp(120px, 28vw, 200px);
@@ -108,7 +93,6 @@
       border: 8px solid rgba(255,255,255,0.85);
       box-shadow: 0 8px 28px rgba(0,0,0,0.25);
     }
-
     #shape-svg {
       width: clamp(140px, 32vw, 210px);
       height: clamp(140px, 32vw, 210px);
@@ -122,7 +106,6 @@
       gap: 12px;
       width: min(94vw, 420px);
     }
-
     .choice-btn {
       display: flex;
       flex-direction: column;
@@ -145,19 +128,10 @@
     }
     .choice-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
     .choice-btn:hover  { transform: translateY(-3px) scale(1.04); box-shadow: 0 10px 0 rgba(0,0,0,0.2); }
-
-    .btn-icon {
-      width: 38px;
-      height: 38px;
-      display: block;
-      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
-    }
+    .btn-icon { width: 38px; height: 38px; display: block; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); }
 
     /* ---- Feedback ---- */
-    #feedback {
-      font-size: clamp(1.3rem, 5vw, 2rem);
-      min-height: 2.6rem;
-    }
+    #feedback { font-size: clamp(1.3rem, 5vw, 2rem); min-height: 2.6rem; }
     .feedback-correct { color: #2e7d32; }
     .feedback-wrong   { color: #c62828; }
 
@@ -180,12 +154,42 @@
     .orange { background: linear-gradient(135deg,#ffa726,#e65100); box-shadow: 0 6px 0 #bf360c; }
 
     /* ---- End screen ---- */
-    #end-title {
-      font-size: clamp(2rem, 7vw, 3rem);
-      color: #6a1b9a;
-      text-shadow: 3px 3px 0 #ce93d8;
+    #end-title { font-size: clamp(2rem, 7vw, 3rem); color: #6a1b9a; text-shadow: 3px 3px 0 #ce93d8; }
+    #end-msg   { font-size: clamp(1.1rem, 4vw, 1.5rem); color: #555; }
+
+    /* ---- Dino screen ---- */
+    #dino-screen { max-width: none; gap: 8px; padding: 8px 0; }
+
+    .dino-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: min(96vw, 500px);
+      padding: 0 8px;
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
+      color: #444;
     }
-    #end-msg { font-size: clamp(1.1rem, 4vw, 1.5rem); color: #555; }
+    .back-btn {
+      background: none;
+      border: 2px solid #9e9e9e;
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+      color: #555;
+    }
+    .dino-scores { display: flex; gap: 16px; }
+    .dino-scores strong { color: #e91e63; }
+
+    #dino-canvas {
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      cursor: pointer;
+      touch-action: none;
+      display: block;
+    }
+    .dino-hint { font-size: clamp(0.9rem, 3vw, 1.1rem); color: #777; }
 
     /* ---- Confetti ---- */
     .confetti-piece {
@@ -197,9 +201,7 @@
       animation: fall linear forwards;
       pointer-events: none;
     }
-    @keyframes fall {
-      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
+    @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
   </style>
 </head>
 <body>
@@ -207,12 +209,13 @@
 <!-- HOME SCREEN -->
 <div id="home-screen" class="screen active">
   <h1 class="big-title">Let's Learn! 🌈</h1>
-  <p class="sub-title">What do you want to learn today?</p>
+  <p class="sub-title">What do you want to play today?</p>
   <button class="mode-btn colors-btn" onclick="startGame('colors')">🎨 Colors</button>
   <button class="mode-btn shapes-btn" onclick="startGame('shapes')">🔷 Shapes</button>
+  <button class="mode-btn dino-btn"   onclick="startDino()">🦕 Dinosaur</button>
 </div>
 
-<!-- GAME SCREEN -->
+<!-- COLORS / SHAPES GAME SCREEN -->
 <div id="game-screen" class="screen">
   <h1 id="game-title" class="big-title"></h1>
   <div id="score-board">
@@ -226,7 +229,20 @@
   <button id="next-btn" class="action-btn purple" style="display:none" onclick="nextRound()">Next ➜</button>
 </div>
 
-<!-- END SCREEN -->
+<!-- DINO SCREEN -->
+<div id="dino-screen" class="screen">
+  <div class="dino-header">
+    <button class="back-btn" onclick="stopDino()">← Back</button>
+    <div class="dino-scores">
+      <span>Score: <strong id="dino-score">0</strong></span>
+      <span>Best: <strong id="dino-hi">0</strong></span>
+    </div>
+  </div>
+  <canvas id="dino-canvas"></canvas>
+  <p class="dino-hint">Tap the dino or press Space to jump! 🦕</p>
+</div>
+
+<!-- END SCREEN (colors / shapes) -->
 <div id="end-screen" class="screen">
   <div id="end-title"></div>
   <p id="end-msg"></p>
@@ -235,232 +251,499 @@
 </div>
 
 <script>
-  // ---- Color data ----
-  const COLORS = [
-    { name: 'Red',    hex: '#e53935' },
-    { name: 'Blue',   hex: '#1e88e5' },
-    { name: 'Green',  hex: '#43a047' },
-    { name: 'Yellow', hex: '#fdd835' },
-    { name: 'Orange', hex: '#fb8c00' },
-    { name: 'Purple', hex: '#8e24aa' },
-    { name: 'Pink',   hex: '#e91e8c' },
-    { name: 'Brown',  hex: '#795548' },
-    { name: 'Black',  hex: '#212121' },
-    { name: 'White',  hex: '#f5f5f5', darkText: true },
-  ];
+// ============================================================
+// SHARED UTILITIES
+// ============================================================
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function showHome() {
+  stopDino();
+  showScreen('home-screen');
+}
 
-  // ---- Shape data — SVG paths in a 100×100 viewBox ----
-  const SHAPES = [
-    { name: 'Circle',    svg: '<circle cx="50" cy="50" r="44"/>' },
-    { name: 'Square',    svg: '<rect x="6" y="6" width="88" height="88" rx="6"/>' },
-    { name: 'Triangle',  svg: '<polygon points="50,5 95,95 5,95"/>' },
-    { name: 'Rectangle', svg: '<rect x="4" y="22" width="92" height="56" rx="6"/>' },
-    { name: 'Star',      svg: '<polygon points="50,5 61,35 93,36 67,56 76,86 50,68 24,86 33,56 7,36 39,35"/>' },
-    { name: 'Heart',     svg: '<path d="M50,82 C12,56 4,36 4,24 C4,13 13,4 26,4 C35,4 44,10 50,19 C56,10 65,4 74,4 C87,4 96,13 96,24 C96,36 88,56 50,82Z"/>' },
-    { name: 'Diamond',   svg: '<polygon points="50,5 95,50 50,95 5,50"/>' },
-    { name: 'Oval',      svg: '<ellipse cx="50" cy="50" rx="44" ry="28"/>' },
-  ];
+// ---- Audio ----
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+function playTone(freq, type, dur, vol = 0.3) {
+  ensureAudio();
+  const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+function playSuccess() {
+  [523,659,784,1047].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.25,0.35), i*100));
+}
+function playWrong() {
+  playTone(220,'square',0.3,0.2);
+  setTimeout(() => playTone(196,'square',0.3,0.2), 180);
+}
 
-  const BRIGHT_FILLS  = ['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#e91e8c','#00897b','#ff7043','#26c6da','#fdd835'];
-  const BTN_COLORS    = ['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#00897b'];
+// ---- Vibration ----
+function vibrate(pattern) { if (navigator.vibrate) navigator.vibrate(pattern); }
 
-  // ---- State ----
-  let currentMode = null;
-  let round = 0, score = 0;
-  let answered = false;
-  let queue = [];
-  const TOTAL_ROUNDS = 10;
-
-  // ---- Screen helpers ----
-  function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+// ---- Confetti ----
+function confetti() {
+  const cols = ['#f44336','#2196f3','#4caf50','#ffeb3b','#ff9800','#9c27b0','#e91e63'];
+  for (let i = 0; i < 55; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random()*100+'vw';
+    el.style.background = cols[Math.floor(Math.random()*cols.length)];
+    el.style.animationDuration = (1.5+Math.random()*2)+'s';
+    el.style.animationDelay    = (Math.random()*0.5)+'s';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
   }
-  function showHome() { showScreen('home-screen'); }
+}
 
-  // ---- Audio (Web Audio API) ----
-  const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  let audioCtx;
-  function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
-  function playTone(freq, type, dur, vol = 0.3) {
-    ensureAudio();
-    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-    osc.start(); osc.stop(audioCtx.currentTime + dur);
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
   }
-  function vibrate(pattern) {
-    if (navigator.vibrate) navigator.vibrate(pattern);
-  }
+  return a;
+}
 
-  function playSuccess() {
-    [523,659,784,1047].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.25,0.35), i*100));
-  }
-  function playWrong() {
-    playTone(220,'square',0.3,0.2);
-    setTimeout(() => playTone(196,'square',0.3,0.2), 180);
-  }
+// ============================================================
+// COLORS & SHAPES GAME
+// ============================================================
+const COLORS = [
+  { name:'Red',    hex:'#e53935' },
+  { name:'Blue',   hex:'#1e88e5' },
+  { name:'Green',  hex:'#43a047' },
+  { name:'Yellow', hex:'#fdd835' },
+  { name:'Orange', hex:'#fb8c00' },
+  { name:'Purple', hex:'#8e24aa' },
+  { name:'Pink',   hex:'#e91e8c' },
+  { name:'Brown',  hex:'#795548' },
+  { name:'Black',  hex:'#212121' },
+  { name:'White',  hex:'#f5f5f5', darkText:true },
+];
 
-  // ---- Confetti ----
-  function confetti() {
-    const cols = ['#f44336','#2196f3','#4caf50','#ffeb3b','#ff9800','#9c27b0','#e91e63'];
-    for (let i = 0; i < 55; i++) {
-      const el = document.createElement('div');
-      el.className = 'confetti-piece';
-      el.style.left = Math.random() * 100 + 'vw';
-      el.style.background = cols[Math.floor(Math.random() * cols.length)];
-      el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
-      el.style.animationDelay    = (Math.random() * 0.5) + 's';
-      document.body.appendChild(el);
-      setTimeout(() => el.remove(), 4000);
-    }
-  }
+const SHAPES = [
+  { name:'Circle',    svg:'<circle cx="50" cy="50" r="44"/>' },
+  { name:'Square',    svg:'<rect x="6" y="6" width="88" height="88" rx="6"/>' },
+  { name:'Triangle',  svg:'<polygon points="50,5 95,95 5,95"/>' },
+  { name:'Rectangle', svg:'<rect x="4" y="22" width="92" height="56" rx="6"/>' },
+  { name:'Star',      svg:'<polygon points="50,5 61,35 93,36 67,56 76,86 50,68 24,86 33,56 7,36 39,35"/>' },
+  { name:'Heart',     svg:'<path d="M50,82 C12,56 4,36 4,24 C4,13 13,4 26,4 C35,4 44,10 50,19 C56,10 65,4 74,4 C87,4 96,13 96,24 C96,36 88,56 50,82Z"/>' },
+  { name:'Diamond',   svg:'<polygon points="50,5 95,50 50,95 5,50"/>' },
+  { name:'Oval',      svg:'<ellipse cx="50" cy="50" rx="44" ry="28"/>' },
+];
 
-  // ---- Shuffle ----
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length-1; i > 0; i--) {
-      const j = Math.floor(Math.random()*(i+1));
-      [a[i],a[j]] = [a[j],a[i]];
-    }
-    return a;
-  }
+const BRIGHT_FILLS = ['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#e91e8c','#00897b','#ff7043','#26c6da'];
+const BTN_COLORS   = ['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#00897b'];
 
-  function buildQueue(dataset) {
-    const q = [];
-    while (q.length < TOTAL_ROUNDS)
-      shuffle(dataset).forEach(x => { if (q.length < TOTAL_ROUNDS) q.push(x); });
-    return q;
-  }
+let currentMode = null, round = 0, score = 0, answered = false, queue = [];
+const TOTAL_ROUNDS = 10;
 
-  // ---- Start game ----
-  function startGame(mode) {
-    currentMode = mode;
-    round = 0; score = 0; answered = false;
-    queue = buildQueue(mode === 'colors' ? COLORS : SHAPES);
-    document.getElementById('game-title').textContent = mode === 'colors' ? '🎨 Colors!' : '🔷 Shapes!';
-    document.getElementById('stars-count').textContent = '0';
-    showScreen('game-screen');
-    nextRound();
-  }
-  function playAgain() { startGame(currentMode); }
+function buildQueue(dataset) {
+  const q = [];
+  while (q.length < TOTAL_ROUNDS)
+    shuffle(dataset).forEach(x => { if (q.length < TOTAL_ROUNDS) q.push(x); });
+  return q;
+}
 
-  // ---- Load a round ----
-  function nextRound() {
-    if (round >= TOTAL_ROUNDS) { showEnd(); return; }
-    answered = false;
-    document.getElementById('next-btn').style.display = 'none';
-    document.getElementById('feedback').textContent = '';
-    document.getElementById('feedback').className   = '';
-    document.getElementById('round-num').textContent = round + 1;
+function startGame(mode) {
+  stopDino();
+  currentMode = mode; round = 0; score = 0; answered = false;
+  queue = buildQueue(mode === 'colors' ? COLORS : SHAPES);
+  document.getElementById('game-title').textContent = mode === 'colors' ? '🎨 Colors!' : '🔷 Shapes!';
+  document.getElementById('stars-count').textContent = '0';
+  showScreen('game-screen');
+  nextRound();
+}
+function playAgain() { startGame(currentMode); }
 
-    const target = queue[round++];
-    if (currentMode === 'colors') renderColorRound(target);
-    else renderShapeRound(target);
-  }
+function nextRound() {
+  if (round >= TOTAL_ROUNDS) { showEnd(); return; }
+  answered = false;
+  document.getElementById('next-btn').style.display = 'none';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = '';
+  document.getElementById('round-num').textContent = round + 1;
+  const target = queue[round++];
+  if (currentMode === 'colors') renderColorRound(target);
+  else renderShapeRound(target);
+}
 
-  // ---- Colors round ----
-  function renderColorRound(target) {
-    document.getElementById('question').textContent = 'What color is this?';
-    document.getElementById('display-area').innerHTML =
-      `<div id="color-blob" style="background:${target.hex}"></div>`;
+function renderColorRound(target) {
+  document.getElementById('question').textContent = 'What color is this?';
+  document.getElementById('display-area').innerHTML =
+    `<div id="color-blob" style="background:${target.hex}"></div>`;
+  const options = shuffle([target, ...shuffle(COLORS.filter(c=>c.name!==target.name)).slice(0,3)]);
+  const box = document.getElementById('choices');
+  box.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = opt.name;
+    btn.style.background = opt.hex;
+    if (opt.darkText) { btn.style.color='#333'; btn.style.textShadow='none'; btn.style.border='3px solid #ccc'; }
+    btn.onclick = () => handleAnswer(btn, opt.name===target.name, target.name);
+    box.appendChild(btn);
+  });
+}
 
-    const others  = shuffle(COLORS.filter(c => c.name !== target.name)).slice(0,3);
-    const options = shuffle([target, ...others]);
-    const box = document.getElementById('choices');
-    box.innerHTML = '';
-    options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className   = 'choice-btn';
-      btn.textContent = opt.name;
-      btn.style.background = opt.hex;
-      if (opt.darkText) { btn.style.color='#333'; btn.style.textShadow='none'; btn.style.border='3px solid #ccc'; }
-      btn.onclick = () => handleAnswer(btn, opt.name === target.name, target.name);
-      box.appendChild(btn);
+function renderShapeRound(target) {
+  document.getElementById('question').textContent = 'What shape is this?';
+  const fill = BRIGHT_FILLS[Math.floor(Math.random()*BRIGHT_FILLS.length)];
+  document.getElementById('display-area').innerHTML =
+    `<svg id="shape-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+       <g fill="${fill}" stroke="white" stroke-width="3">${target.svg}</g>
+     </svg>`;
+  const options = shuffle([target, ...shuffle(SHAPES.filter(s=>s.name!==target.name)).slice(0,3)]);
+  const box = document.getElementById('choices');
+  box.innerHTML = '';
+  options.forEach((opt,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.style.background = BTN_COLORS[i % BTN_COLORS.length];
+    btn.innerHTML =
+      `<svg class="btn-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+         <g fill="white" stroke="rgba(0,0,0,0.15)" stroke-width="3">${opt.svg}</g>
+       </svg><span>${opt.name}</span>`;
+    btn.onclick = () => handleAnswer(btn, opt.name===target.name, target.name);
+    box.appendChild(btn);
+  });
+}
+
+function handleAnswer(btn, correct, correctName) {
+  if (answered) return;
+  answered = true;
+  document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents='none');
+  const fb = document.getElementById('feedback');
+  if (correct) {
+    score++;
+    playSuccess(); confetti(); vibrate([50,30,50]);
+    btn.style.outline = '6px solid #00e676';
+    fb.textContent = randomPraise();
+    fb.className = 'feedback-correct';
+    document.getElementById('stars-count').textContent = score;
+  } else {
+    playWrong(); vibrate([200]);
+    btn.style.outline = '6px solid #ff1744';
+    fb.textContent = `Oops! It was ${correctName}! 🙂`;
+    fb.className = 'feedback-wrong';
+    document.querySelectorAll('.choice-btn').forEach(b => {
+      const label = b.querySelector('span') || b;
+      if (label.textContent.trim() === correctName) b.style.outline = '6px solid #00e676';
     });
   }
+  document.getElementById('next-btn').style.display = 'inline-block';
+}
 
-  // ---- Shapes round ----
-  function renderShapeRound(target) {
-    document.getElementById('question').textContent = 'What shape is this?';
-    const fill = BRIGHT_FILLS[Math.floor(Math.random() * BRIGHT_FILLS.length)];
-    document.getElementById('display-area').innerHTML =
-      `<svg id="shape-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-         <g fill="${fill}" stroke="white" stroke-width="3">${target.svg}</g>
-       </svg>`;
+const PRAISES = ['Great job! 🎉','Awesome! 🌟','You rock! 🤩','Super! 🦄','Brilliant! 🏆','Wonderful! 🎊','Amazing! 💫','YES! 🥳','Perfect! 🌈'];
+function randomPraise() { return PRAISES[Math.floor(Math.random()*PRAISES.length)]; }
 
-    const others  = shuffle(SHAPES.filter(s => s.name !== target.name)).slice(0,3);
-    const options = shuffle([target, ...others]);
-    const box = document.getElementById('choices');
-    box.innerHTML = '';
-    options.forEach((opt, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'choice-btn';
-      btn.style.background = BTN_COLORS[i % BTN_COLORS.length];
-      btn.innerHTML =
-        `<svg class="btn-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-           <g fill="white" stroke="rgba(0,0,0,0.15)" stroke-width="3">${opt.svg}</g>
-         </svg>
-         <span>${opt.name}</span>`;
-      btn.onclick = () => handleAnswer(btn, opt.name === target.name, target.name);
-      box.appendChild(btn);
+function showEnd() {
+  showScreen('end-screen');
+  const thing = currentMode === 'colors' ? 'color' : 'shape';
+  let title, msg;
+  if (score === TOTAL_ROUNDS) {
+    title='🏆 Perfect Score!'; msg=`All ${TOTAL_ROUNDS} right! You are a ${thing} superstar! 🌟`;
+    confetti(); confetti();
+  } else if (score >= TOTAL_ROUNDS*0.7) {
+    title='🎉 Well Done!'; msg=`You got ${score} out of ${TOTAL_ROUNDS}! Keep it up! 💪`;
+  } else {
+    title='😊 Good Try!'; msg=`You got ${score} out of ${TOTAL_ROUNDS}. Play again! 🎨`;
+  }
+  document.getElementById('end-title').textContent = title;
+  document.getElementById('end-msg').textContent   = msg;
+}
+
+// ============================================================
+// DINOSAUR GAME
+// ============================================================
+let dc, dctx;        // canvas & context
+let DW, DH, GY;     // canvas width, height, ground Y
+let dinoObj, obs, clouds, dashOff;
+let dSpeed, dFrame, nextObs;
+let dScore, dHi = 0;
+let dState = 'off';  // off | idle | playing | dead
+let dRaf;
+
+function startDino() {
+  showScreen('dino-screen');
+  dc   = document.getElementById('dino-canvas');
+  dctx = dc.getContext('2d');
+  DW   = dc.width  = Math.min(window.innerWidth - 24, 500);
+  DH   = dc.height = 280;
+  GY   = DH - 52;
+
+  dc.addEventListener('touchstart', dinoJump, { passive: true });
+  dc.addEventListener('click', dinoJump);
+
+  resetDinoGame();
+  dState = 'idle';
+  drawDinoFrame();
+}
+
+function stopDino() {
+  if (dState === 'off') return;
+  cancelAnimationFrame(dRaf);
+  if (dc) {
+    dc.removeEventListener('touchstart', dinoJump);
+    dc.removeEventListener('click', dinoJump);
+  }
+  dState = 'off';
+}
+
+function resetDinoGame() {
+  dinoObj = { x:70, y:GY-54, w:44, h:54, vy:0, onGround:true };
+  obs     = [];
+  clouds  = [
+    { x:DW*0.25, y:38, w:72, spd:0.5 },
+    { x:DW*0.65, y:58, w:52, spd:0.3 },
+    { x:DW*0.85, y:30, w:60, spd:0.4 },
+  ];
+  dashOff  = 0;
+  dSpeed   = 4;
+  dFrame   = 0;
+  nextObs  = 100;
+  dScore   = 0;
+  document.getElementById('dino-score').textContent = '0';
+}
+
+function dinoJump() {
+  if (dState === 'idle') {
+    dState = 'playing';
+    dRaf = requestAnimationFrame(dinoTick);
+    return;
+  }
+  if (dState === 'dead') {
+    resetDinoGame();
+    dState = 'playing';
+    dRaf = requestAnimationFrame(dinoTick);
+    return;
+  }
+  if (dState === 'playing' && dinoObj.onGround) {
+    dinoObj.vy = -15;
+    dinoObj.onGround = false;
+    playTone(520, 'sine', 0.08, 0.25);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if ((e.code === 'Space' || e.code === 'ArrowUp') && dState !== 'off') {
+    e.preventDefault();
+    dinoJump();
+  }
+});
+
+function dinoTick() {
+  updateDino();
+  drawDinoFrame();
+  if (dState === 'playing') dRaf = requestAnimationFrame(dinoTick);
+}
+
+function updateDino() {
+  dFrame++;
+
+  // Physics
+  if (!dinoObj.onGround) {
+    dinoObj.vy += 0.75;
+    dinoObj.y  += dinoObj.vy;
+    if (dinoObj.y >= GY - dinoObj.h) {
+      dinoObj.y = GY - dinoObj.h;
+      dinoObj.vy = 0;
+      dinoObj.onGround = true;
+    }
+  }
+
+  // Speed ramp
+  dSpeed = 4 + Math.floor(dFrame / 280) * 0.6;
+
+  // Score
+  if (dFrame % 5 === 0) {
+    dScore++;
+    document.getElementById('dino-score').textContent = dScore;
+  }
+
+  // Clouds
+  clouds.forEach(c => { c.x -= c.spd; if (c.x + c.w < 0) c.x = DW + 60; });
+  dashOff += dSpeed;
+
+  // Spawn obstacles
+  nextObs--;
+  if (nextObs <= 0) {
+    const h = 38 + Math.random() * 38;
+    obs.push({
+      x: DW, y: GY - h, w: 18 + Math.random()*14, h,
+      leftArm:  Math.random() > 0.45,
+      rightArm: Math.random() > 0.5,
     });
+    nextObs = Math.floor(55 + Math.random()*80 - dSpeed*2);
   }
+  obs.forEach(o => o.x -= dSpeed);
+  obs = obs.filter(o => o.x + o.w > 0);
 
-  // ---- Handle answer ----
-  function handleAnswer(btn, correct, correctName) {
-    if (answered) return;
-    answered = true;
-    document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents = 'none');
-
-    const fb = document.getElementById('feedback');
-    if (correct) {
-      score++;
-      playSuccess(); confetti(); vibrate([50,30,50]);
-      btn.style.outline = '6px solid #00e676';
-      fb.textContent = randomPraise();
-      fb.className = 'feedback-correct';
-      document.getElementById('stars-count').textContent = score;
-    } else {
-      playWrong(); vibrate([200]);
-      btn.style.outline = '6px solid #ff1744';
-      fb.textContent = `Oops! It was ${correctName}! 🙂`;
-      fb.className = 'feedback-wrong';
-      document.querySelectorAll('.choice-btn').forEach(b => {
-        const label = b.querySelector('span') || b;
-        if (label.textContent.trim() === correctName) b.style.outline = '6px solid #00e676';
-      });
+  // Collision (forgiving hitbox)
+  const p = 7;
+  for (const o of obs) {
+    if (dinoObj.x+p < o.x+o.w-p &&
+        dinoObj.x+dinoObj.w-p > o.x+p &&
+        dinoObj.y+p < o.y+o.h &&
+        dinoObj.y+dinoObj.h-p > o.y) {
+      dinoDie();
+      return;
     }
-    document.getElementById('next-btn').style.display = 'inline-block';
   }
+}
 
-  // ---- Praise ----
-  const PRAISES = ['Great job! 🎉','Awesome! 🌟','You rock! 🤩','Super! 🦄',
-                   'Brilliant! 🏆','Wonderful! 🎊','Amazing! 💫','YES! 🥳','Perfect! 🌈'];
-  function randomPraise() { return PRAISES[Math.floor(Math.random()*PRAISES.length)]; }
-
-  // ---- End screen ----
-  function showEnd() {
-    showScreen('end-screen');
-    const thing = currentMode === 'colors' ? 'color' : 'shape';
-    let title, msg;
-    if (score === TOTAL_ROUNDS) {
-      title = '🏆 Perfect Score!';
-      msg   = `You got all ${TOTAL_ROUNDS} right! You are a ${thing} superstar! 🌟`;
-      confetti(); confetti();
-    } else if (score >= TOTAL_ROUNDS * 0.7) {
-      title = '🎉 Well Done!';
-      msg   = `You got ${score} out of ${TOTAL_ROUNDS}! Keep practicing! 💪`;
-    } else {
-      title = '😊 Good Try!';
-      msg   = `You got ${score} out of ${TOTAL_ROUNDS}. Play again to improve! 🎨`;
-    }
-    document.getElementById('end-title').textContent = title;
-    document.getElementById('end-msg').textContent   = msg;
+function dinoDie() {
+  dState = 'dead';
+  if (dScore > dHi) {
+    dHi = dScore;
+    document.getElementById('dino-hi').textContent = dHi;
   }
+  playWrong();
+  vibrate([100,40,100,40,200]);
+  drawDinoFrame();
+}
+
+// ---- Drawing ----
+function drawDinoFrame() {
+  const ctx = dctx, W = DW, H = DH;
+
+  // Sky gradient
+  const sky = ctx.createLinearGradient(0,0,0,GY);
+  sky.addColorStop(0,'#bbdefb');
+  sky.addColorStop(1,'#e3f2fd');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,W,GY);
+
+  // Clouds
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  clouds.forEach(c => {
+    ctx.beginPath(); ctx.ellipse(c.x+c.w/2, c.y, c.w/2, 13, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(c.x+c.w*0.28, c.y+5, c.w*0.28, 9, 0, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(c.x+c.w*0.72, c.y+5, c.w*0.24, 8, 0, 0, Math.PI*2); ctx.fill();
+  });
+
+  // Ground
+  ctx.fillStyle = '#c8e6c9';
+  ctx.fillRect(0, GY, W, H-GY);
+  ctx.fillStyle = '#a5d6a7';
+  ctx.fillRect(0, GY, W, 5);
+
+  // Scrolling ground dashes
+  ctx.fillStyle = '#81c784';
+  for (let dx = -(dashOff % 48); dx < W; dx += 48)
+    ctx.fillRect(dx, GY+8, 24, 3);
+
+  // Obstacles
+  obs.forEach(drawCactus);
+
+  // Dino
+  drawDinoShape();
+
+  // Overlays
+  if (dState === 'idle') {
+    drawOverlay('🦕 Tap to Start!', null);
+  } else if (dState === 'dead') {
+    drawOverlay('Game Over! 😢', `Tap to Play Again  •  Score: ${dScore}`);
+  }
+}
+
+function drawDinoShape() {
+  const ctx = dctx;
+  const alive = dState !== 'dead';
+  const x = Math.round(dinoObj.x), y = Math.round(dinoObj.y);
+
+  // Tail
+  ctx.fillStyle = alive ? '#43a047' : '#e53935';
+  ctx.beginPath();
+  ctx.moveTo(x+2,  y+26);
+  ctx.lineTo(x-14, y+33);
+  ctx.lineTo(x-10, y+42);
+  ctx.lineTo(x+2,  y+40);
+  ctx.fill();
+
+  // Body
+  ctx.fillStyle = alive ? '#43a047' : '#e53935';
+  rrect(ctx, x, y+18, 38, 28, 6);
+
+  // Head
+  rrect(ctx, x+10, y, 28, 22, 5);
+
+  // Eye white
+  ctx.fillStyle = alive ? 'white' : '#ffcdd2';
+  ctx.beginPath(); ctx.arc(x+28, y+8, 6, 0, Math.PI*2); ctx.fill();
+  // Pupil
+  ctx.fillStyle = '#1b5e20';
+  ctx.beginPath(); ctx.arc(x+29, y+9, 3, 0, Math.PI*2); ctx.fill();
+  // Nostril
+  ctx.fillStyle = '#2e7d32';
+  ctx.fillRect(x+35, y+15, 3, 2);
+
+  // Legs (animated when on ground)
+  ctx.fillStyle = alive ? '#43a047' : '#e53935';
+  const legBounce = dinoObj.onGround && alive ? Math.floor(dFrame/7)%2 : 0;
+  rrect(ctx, x+7,  y+44, 10, 12 - legBounce*4, 3);
+  rrect(ctx, x+22, y+44, 10, 8  + legBounce*4, 3);
+}
+
+function drawCactus(o) {
+  const ctx = dctx;
+  ctx.fillStyle = '#388e3c';
+  const cx = o.x + Math.floor(o.w/2);
+
+  // Stem
+  rrect(ctx, cx-5, o.y, 10, o.h, 3);
+
+  // Left arm
+  if (o.leftArm) {
+    const ay = o.y + o.h*0.32;
+    rrect(ctx, o.x, ay, cx-5-o.x+2, 7, 2);
+    rrect(ctx, o.x, o.y + o.h*0.1, 7, ay - o.y + o.h*0.08, 2);
+  }
+  // Right arm
+  if (o.rightArm) {
+    const ay = o.y + o.h*0.46;
+    rrect(ctx, cx+3, ay, o.x+o.w-(cx+3), 7, 2);
+    rrect(ctx, o.x+o.w-7, o.y + o.h*0.16, 7, ay - o.y + o.h*0.08, 2);
+  }
+}
+
+function drawOverlay(line1, line2) {
+  const ctx = dctx;
+  ctx.fillStyle = 'rgba(0,0,0,0.38)';
+  ctx.fillRect(0, 0, DW, DH);
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#fff';
+  ctx.font = `bold ${Math.max(18, Math.floor(DW/13))}px 'Comic Sans MS', cursive`;
+  ctx.fillText(line1, DW/2, DH/2 - (line2 ? 16 : 0));
+  if (line2) {
+    ctx.font = `${Math.max(14, Math.floor(DW/18))}px 'Comic Sans MS', cursive`;
+    ctx.fillText(line2, DW/2, DH/2 + 26);
+  }
+}
+
+// Rounded rect helper (works everywhere, no roundRect API needed)
+function rrect(ctx, x, y, w, h, r) {
+  r = Math.min(r, w/2, h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.arcTo(x+w, y,   x+w, y+r,   r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.arcTo(x+w, y+h, x+w-r, y+h, r);
+  ctx.lineTo(x+r, y+h);
+  ctx.arcTo(x,   y+h, x, y+h-r,   r);
+  ctx.lineTo(x, y+r);
+  ctx.arcTo(x,   y,   x+r, y,     r);
+  ctx.closePath();
+  ctx.fill();
+}
 </script>
 </body>
 </html>
