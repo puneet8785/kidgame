@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Game for Kids!</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+      background: linear-gradient(135deg, #fff9c4 0%, #fce4ec 50%, #e3f2fd 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      color: #6a1b9a;
+      text-shadow: 3px 3px 0 #ce93d8;
+      margin-bottom: 8px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    #score-board {
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    #score-board span { font-weight: bold; color: #e91e63; }
+
+    /* ---- Question area ---- */
+    #question {
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      color: #333;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    #color-blob {
+      width: clamp(130px, 30vw, 220px);
+      height: clamp(130px, 30vw, 220px);
+      border-radius: 50%;
+      border: 8px solid rgba(255,255,255,0.8);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      margin: 0 auto 28px;
+      transition: transform 0.3s;
+      animation: wobble 3s infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      25%       { transform: scale(1.05) rotate(3deg); }
+      75%       { transform: scale(1.05) rotate(-3deg); }
+    }
+
+    /* ---- Answer buttons ---- */
+    #choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      width: min(90vw, 420px);
+      margin-bottom: 24px;
+    }
+
+    .choice-btn {
+      padding: 18px 10px;
+      border: none;
+      border-radius: 18px;
+      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      font-family: inherit;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+      transition: transform 0.1s, box-shadow 0.1s;
+      letter-spacing: 1px;
+    }
+
+    .choice-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+    }
+
+    .choice-btn:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+    }
+
+    /* ---- Feedback banner ---- */
+    #feedback {
+      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      min-height: 2.8rem;
+      text-align: center;
+      transition: opacity 0.4s;
+    }
+
+    .feedback-correct { color: #2e7d32; }
+    .feedback-wrong   { color: #c62828; }
+
+    /* ---- Next button ---- */
+    #next-btn {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 40px;
+      font-size: clamp(1rem, 3.5vw, 1.4rem);
+      font-family: inherit;
+      font-weight: bold;
+      background: linear-gradient(135deg, #ab47bc, #7b1fa2);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #4a148c;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    #next-btn:active  { transform: translateY(4px); box-shadow: 0 2px 0 #4a148c; }
+    #next-btn:hover   { transform: translateY(-2px); }
+
+    /* ---- Celebration confetti ---- */
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      animation: fall linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ---- End screen ---- */
+    #end-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      text-align: center;
+    }
+
+    #end-screen h2 {
+      font-size: clamp(2rem, 7vw, 3.5rem);
+      color: #6a1b9a;
+      text-shadow: 3px 3px 0 #ce93d8;
+    }
+
+    #end-screen p  { font-size: clamp(1.1rem, 4vw, 1.6rem); color: #555; }
+
+    #play-again-btn {
+      padding: 16px 50px;
+      font-size: clamp(1.1rem, 4vw, 1.6rem);
+      font-family: inherit;
+      font-weight: bold;
+      background: linear-gradient(135deg, #26c6da, #00838f);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #006064;
+      transition: transform 0.1s;
+    }
+    #play-again-btn:active { transform: translateY(4px); }
+    #play-again-btn:hover  { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+<h1>🎨 Find the Color!</h1>
+<div id="score-board">Stars: <span id="stars">⭐</span> &nbsp;|&nbsp; Round: <span id="round-num">1</span> / 10</div>
+
+<!-- Game area -->
+<div id="game-area">
+  <div id="question">What color is this?</div>
+  <div id="color-blob"></div>
+  <div id="choices"></div>
+  <div id="feedback"></div>
+  <button id="next-btn" onclick="nextRound()">Next ➜</button>
+</div>
+
+<!-- End screen -->
+<div id="end-screen">
+  <h2 id="end-title"></h2>
+  <p id="end-msg"></p>
+  <button id="play-again-btn" onclick="startGame()">Play Again! 🎮</button>
+</div>
+
+<script>
+  const COLORS = [
+    { name: 'Red',    hex: '#e53935' },
+    { name: 'Blue',   hex: '#1e88e5' },
+    { name: 'Green',  hex: '#43a047' },
+    { name: 'Yellow', hex: '#fdd835' },
+    { name: 'Orange', hex: '#fb8c00' },
+    { name: 'Purple', hex: '#8e24aa' },
+    { name: 'Pink',   hex: '#e91e8c' },
+    { name: 'Brown',  hex: '#795548' },
+    { name: 'Black',  hex: '#212121' },
+    { name: 'White',  hex: '#f5f5f5', dark: true },
+  ];
+
+  const TOTAL_ROUNDS = 10;
+  let round = 0;
+  let score = 0;
+  let answered = false;
+  let queue = [];
+
+  // ---- Audio helpers (Web Audio API) ----
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  let ctx;
+
+  function ensureAudio() {
+    if (!ctx) ctx = new AudioCtx();
+  }
+
+  function playTone(freq, type, duration, startVol = 0.3) {
+    ensureAudio();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime);
+    gain.gain.setValueAtTime(startVol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  }
+
+  function playSuccess() {
+    [523, 659, 784, 1047].forEach((f, i) => {
+      setTimeout(() => playTone(f, 'sine', 0.25, 0.35), i * 100);
+    });
+  }
+
+  function playWrong() {
+    playTone(220, 'square', 0.3, 0.2);
+    setTimeout(() => playTone(196, 'square', 0.3, 0.2), 180);
+  }
+
+  // ---- Confetti ----
+  function confetti() {
+    const colors = ['#f44336','#2196f3','#4caf50','#ffeb3b','#ff9800','#9c27b0','#e91e63'];
+    for (let i = 0; i < 55; i++) {
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      el.style.left       = Math.random() * 100 + 'vw';
+      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
+      el.style.animationDelay    = (Math.random() * 0.5) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+  }
+
+  // ---- Shuffle helper ----
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  // ---- Build round queue (no back-to-back repeats) ----
+  function buildQueue() {
+    const q = [];
+    while (q.length < TOTAL_ROUNDS) {
+      const batch = shuffle([...COLORS]);
+      batch.forEach(c => { if (q.length < TOTAL_ROUNDS) q.push(c); });
+    }
+    return q;
+  }
+
+  // ---- Start / restart ----
+  function startGame() {
+    round = 0;
+    score = 0;
+    queue = buildQueue();
+    document.getElementById('end-screen').style.display   = 'none';
+    document.getElementById('game-area').style.display    = 'block';
+    document.getElementById('stars').textContent = '⭐';
+    nextRound();
+  }
+
+  // ---- Load a round ----
+  function nextRound() {
+    if (round >= TOTAL_ROUNDS) { showEnd(); return; }
+    answered = false;
+
+    document.getElementById('next-btn').style.display = 'none';
+    document.getElementById('feedback').textContent   = '';
+    document.getElementById('feedback').className     = '';
+
+    const target = queue[round];
+    document.getElementById('color-blob').style.background = target.hex;
+    document.getElementById('round-num').textContent = round + 1;
+
+    // Pick 3 wrong options
+    const others = shuffle(COLORS.filter(c => c.name !== target.name)).slice(0, 3);
+    const options = shuffle([target, ...others]);
+
+    const choicesEl = document.getElementById('choices');
+    choicesEl.innerHTML = '';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className        = 'choice-btn';
+      btn.textContent      = opt.name;
+      btn.style.background = opt.hex;
+      if (opt.dark) { btn.style.color = '#333'; btn.style.textShadow = 'none'; btn.style.border = '3px solid #ccc'; }
+      btn.onclick = () => handleAnswer(btn, opt.name === target.name, target.name);
+      choicesEl.appendChild(btn);
+    });
+
+    round++;
+  }
+
+  // ---- Handle answer ----
+  function handleAnswer(btn, correct, correctName) {
+    if (answered) return;
+    answered = true;
+
+    // Disable all buttons
+    document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents = 'none');
+
+    const fb = document.getElementById('feedback');
+    if (correct) {
+      score++;
+      playSuccess();
+      confetti();
+      btn.style.outline = '6px solid #00e676';
+      fb.textContent = randomPraise();
+      fb.className = 'feedback-correct';
+      updateStars();
+    } else {
+      playWrong();
+      btn.style.outline = '6px solid #ff1744';
+      fb.textContent = `Oops! It was ${correctName}! 🙂`;
+      fb.className = 'feedback-wrong';
+      // Highlight correct answer
+      document.querySelectorAll('.choice-btn').forEach(b => {
+        if (b.textContent === correctName) b.style.outline = '6px solid #00e676';
+      });
+    }
+
+    document.getElementById('next-btn').style.display = 'inline-block';
+  }
+
+  // ---- Stars display ----
+  function updateStars() {
+    document.getElementById('stars').textContent = '⭐'.repeat(score);
+  }
+
+  // ---- Random praise messages ----
+  const PRAISES = [
+    'Great job! 🎉', 'Awesome! 🌟', 'You rock! 🤩',
+    'Super! 🦄', 'Brilliant! 🏆', 'Wonderful! 🎊',
+    'Amazing! 💫', 'YES! 🥳', 'Perfect! 🌈',
+  ];
+  function randomPraise() {
+    return PRAISES[Math.floor(Math.random() * PRAISES.length)];
+  }
+
+  // ---- End screen ----
+  function showEnd() {
+    document.getElementById('game-area').style.display  = 'none';
+    document.getElementById('end-screen').style.display = 'flex';
+
+    let title, msg;
+    if (score === TOTAL_ROUNDS) {
+      title = '🏆 Perfect Score!';
+      msg   = `You got all ${TOTAL_ROUNDS} right! You are a color superstar! 🌟`;
+      confetti(); confetti();
+    } else if (score >= TOTAL_ROUNDS * 0.7) {
+      title = '🎉 Well Done!';
+      msg   = `You got ${score} out of ${TOTAL_ROUNDS}! Keep practicing! 💪`;
+    } else {
+      title = '😊 Good Try!';
+      msg   = `You got ${score} out of ${TOTAL_ROUNDS}. Play again to improve! 🎨`;
+    }
+
+    document.getElementById('end-title').textContent = title;
+    document.getElementById('end-msg').textContent   = msg;
+  }
+
+  // ---- Kick off ----
+  startGame();
+</script>
+</body>
+</html>
