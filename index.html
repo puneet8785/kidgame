@@ -498,7 +498,7 @@ function stopDino() {
 }
 
 function resetDinoGame() {
-  dinoObj = { x:55, y:GY-74, w:62, h:74, vy:0, onGround:true };
+  dinoObj = { x:55, y:GY-70, w:55, h:70, vy:0, onGround:true };
   obs     = [];
   clouds  = [
     { x:DW*0.25, y:38, w:72, spd:0.5 },
@@ -657,9 +657,67 @@ function drawDinoFrame() {
 function drawDinoShape() {
   const ctx = dctx;
   const alive = dState !== 'dead';
-  // gx,gy = left edge and feet-ground of the dino
   const gx = Math.round(dinoObj.x);
   const gy = Math.round(dinoObj.y + dinoObj.h);
+  const phase = (dinoObj.onGround && alive) ? Math.floor(dFrame / 8) % 2 : 2;
+
+  // R(x, y, w, h) — x right from gx, y up from gy (ground level)
+  const R = (x, y, w, h) => ctx.fillRect(gx + x, gy - y - h, w, h);
+
+  ctx.fillStyle = '#535353';
+
+  // TAIL
+  R(-10, 30, 12, 6);
+  R(  0, 27,  8, 10);
+
+  // BODY
+  R(0, 24, 28, 16);
+
+  // NECK
+  R(18, 40, 9, 8);
+
+  // HEAD — staircase of rects gives the boxy Chrome-dino profile
+  R(14, 42, 30, 4);
+  R(16, 46, 30, 5);
+  R(18, 51, 28, 5);
+  R(20, 56, 24, 5);
+  R(22, 61, 18, 5);
+
+  // EYE
+  ctx.fillStyle = 'white';
+  R(34, 52, 7, 6);        // white sclera
+  ctx.fillStyle = '#535353';
+  R(35, 53, 4, 4);        // pupil
+
+  // TINY ARM
+  R(20, 38, 6, 4);
+
+  // LEGS
+  if (phase === 2) {                          // airborne — both tucked
+    R( 7, 4, 8, 20);
+    R(17, 4, 8, 20);
+  } else if (phase === 0) {                   // stride A
+    R( 7,  0, 8, 24);                         // back leg down
+    R(17, 12, 8, 12); R(17, 12, 13, 4);      // front leg raised + foot
+  } else {                                    // stride B
+    R( 7, 12, 8, 12); R( 4, 12, 13, 4);     // back leg raised + foot
+    R(17,  0, 8, 24);                         // front leg down
+  }
+
+  // DEAD — red X over eye
+  if (!alive) {
+    ctx.strokeStyle = '#ff3333';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    const ex = gx + 37, ey = gy - 55;
+    ctx.beginPath();
+    ctx.moveTo(ex-6, ey-6); ctx.lineTo(ex+6, ey+6);
+    ctx.moveTo(ex+6, ey-6); ctx.lineTo(ex-6, ey+6);
+    ctx.stroke();
+  }
+}
+
+// (drawTRexLeg removed — no longer used)
 
   // 0=stride-forward, 1=push-back, 2=airborne
   const phase = (dinoObj.onGround && alive) ? Math.floor(dFrame / 8) % 2 : 2;
@@ -669,260 +727,6 @@ function drawDinoShape() {
   const Cl = alive ? '#7ab868' : '#c87070';   // light belly
   const Ca = alive ? '#3a6632' : '#7a2020';   // accent / scales
 
-  ctx.save();
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-
-  // ── TAIL ──────────────────────────────────────────────────────
-  ctx.fillStyle = C;
-  ctx.beginPath();
-  ctx.moveTo(gx+4,  gy-50);
-  ctx.bezierCurveTo(gx-16, gy-46, gx-38, gy-38, gx-52, gy-28);
-  ctx.bezierCurveTo(gx-38, gy-32, gx-16, gy-40, gx+4,  gy-44);
-  ctx.closePath();
-  ctx.fill();
-  // belly stripe on tail
-  ctx.fillStyle = Cl;
-  ctx.beginPath();
-  ctx.moveTo(gx+3, gy-47);
-  ctx.bezierCurveTo(gx-14, gy-43, gx-34, gy-36, gx-48, gy-29);
-  ctx.bezierCurveTo(gx-34, gy-33, gx-14, gy-39, gx+3,  gy-44);
-  ctx.fill();
-
-  // ── BACK LEG (far side, behind body) ──────────────────────────
-  ctx.fillStyle = Cd;
-  drawTRexLeg(ctx, gx+12, gy, phase, true);
-
-  // ── BODY ──────────────────────────────────────────────────────
-  ctx.fillStyle = C;
-  ctx.beginPath();
-  ctx.ellipse(gx+22, gy-52, 24, 18, -0.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // scale texture dots
-  ctx.fillStyle = Ca;
-  [[gx+12,gy-58,5,3],[gx+22,gy-60,5,3],[gx+32,gy-57,5,3],
-   [gx+14,gy-50,4,2.5],[gx+24,gy-52,4,2.5],[gx+30,gy-49,4,2.5]
-  ].forEach(([sx,sy,rx,ry]) => {
-    ctx.beginPath();
-    ctx.ellipse(sx, sy, rx, ry, -0.2, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  // belly highlight
-  ctx.fillStyle = Cl;
-  ctx.beginPath();
-  ctx.ellipse(gx+27, gy-47, 16, 10, 0.1, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── FRONT LEG (near side, in front of body) ───────────────────
-  ctx.fillStyle = C;
-  drawTRexLeg(ctx, gx+20, gy, phase, false);
-
-  // ── NECK ──────────────────────────────────────────────────────
-  ctx.fillStyle = C;
-  ctx.beginPath();
-  ctx.moveTo(gx+26, gy-66);
-  ctx.quadraticCurveTo(gx+40, gy-72, gx+50, gy-84);
-  ctx.lineTo(gx+60, gy-78);
-  ctx.quadraticCurveTo(gx+46, gy-66, gx+34, gy-62);
-  ctx.closePath();
-  ctx.fill();
-
-  // ── HEAD (huge T-Rex skull, facing right) ─────────────────────
-  ctx.fillStyle = C;
-  ctx.beginPath();
-  ctx.moveTo(gx+42, gy-92);                              // back top
-  ctx.quadraticCurveTo(gx+64, gy-96, gx+88, gy-78);    // crown → snout top
-  ctx.lineTo(gx+90, gy-64);                              // tip of snout
-  ctx.quadraticCurveTo(gx+84, gy-59, gx+68, gy-59);    // under-snout
-  ctx.lineTo(gx+48, gy-63);                              // back of upper jaw
-  ctx.quadraticCurveTo(gx+38, gy-72, gx+37, gy-80);    // throat
-  ctx.quadraticCurveTo(gx+37, gy-88, gx+42, gy-92);    // back to top
-  ctx.fill();
-
-  // snout ridge stripe
-  ctx.fillStyle = Ca;
-  ctx.beginPath();
-  ctx.moveTo(gx+62, gy-94);
-  ctx.quadraticCurveTo(gx+76, gy-94, gx+88, gy-78);
-  ctx.lineTo(gx+86, gy-76);
-  ctx.quadraticCurveTo(gx+74, gy-92, gx+62, gy-92);
-  ctx.fill();
-
-  // lower jaw
-  ctx.fillStyle = Cd;
-  ctx.beginPath();
-  ctx.moveTo(gx+50, gy-62);
-  ctx.quadraticCurveTo(gx+70, gy-58, gx+88, gy-62);
-  ctx.lineTo(gx+88, gy-53);
-  ctx.quadraticCurveTo(gx+70, gy-49, gx+50, gy-53);
-  ctx.closePath();
-  ctx.fill();
-
-  // mouth interior (open while running)
-  if (dinoObj.onGround && alive) {
-    ctx.fillStyle = '#b71c1c';
-    ctx.beginPath();
-    ctx.moveTo(gx+54, gy-59);
-    ctx.quadraticCurveTo(gx+70, gy-57, gx+86, gy-60);
-    ctx.lineTo(gx+86, gy-53);
-    ctx.quadraticCurveTo(gx+70, gy-51, gx+54, gy-53);
-    ctx.fill();
-  }
-
-  // upper teeth
-  ctx.fillStyle = '#fffde7';
-  [gx+56, gx+64, gx+72, gx+80].forEach(tx => {
-    ctx.beginPath();
-    ctx.moveTo(tx,   gy-59);
-    ctx.lineTo(tx+3, gy-51);
-    ctx.lineTo(tx+6, gy-59);
-    ctx.fill();
-  });
-
-  // nostril
-  ctx.fillStyle = Cd;
-  ctx.beginPath();
-  ctx.ellipse(gx+86, gy-69, 3, 2, 0.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // ── EYE ───────────────────────────────────────────────────────
-  ctx.fillStyle = Cd;
-  ctx.beginPath();
-  ctx.arc(gx+56, gy-83, 9, 0, Math.PI * 2);
-  ctx.fill();
-
-  if (alive) {
-    ctx.fillStyle = '#f9a825';   // amber predator iris
-    ctx.beginPath();
-    ctx.arc(gx+56, gy-83, 7, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#050505';   // vertical slit pupil
-    ctx.beginPath();
-    ctx.ellipse(gx+56, gy-83, 2.5, 6, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.beginPath();
-    ctx.arc(gx+59, gy-86, 2, 0, Math.PI * 2);
-    ctx.fill();
-  } else {
-    // X eyes on death
-    ctx.strokeStyle = '#ff5252';
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(gx+49, gy-90); ctx.lineTo(gx+63, gy-76);
-    ctx.moveTo(gx+63, gy-90); ctx.lineTo(gx+49, gy-76);
-    ctx.stroke();
-  }
-
-  // brow ridge (angry / fierce look)
-  ctx.strokeStyle = Cd;
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.moveTo(gx+48, gy-91);
-  ctx.lineTo(gx+64, gy-93);
-  ctx.stroke();
-
-  // ── TINY ARMS (T-Rex trademark) ───────────────────────────────
-  ctx.strokeStyle = Cd;
-  ctx.lineWidth = 5;
-  ctx.beginPath();
-  ctx.moveTo(gx+40, gy-64);
-  ctx.lineTo(gx+50, gy-54);
-  ctx.stroke();
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  ctx.moveTo(gx+50, gy-54); ctx.lineTo(gx+56, gy-49);
-  ctx.moveTo(gx+50, gy-54); ctx.lineTo(gx+57, gy-54);
-  ctx.stroke();
-
-  // ── DORSAL SPINES ─────────────────────────────────────────────
-  ctx.fillStyle = Cd;
-  [[gx+18,gy-68,4,8,-0.4],[gx+25,gy-69,4,9,-0.3],
-   [gx+32,gy-68,3.5,8,-0.2],[gx+38,gy-66,3,6,-0.1]
-  ].forEach(([sx,sy,rx,ry,rot]) => {
-    ctx.beginPath();
-    ctx.ellipse(sx, sy, rx, ry, rot, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  ctx.restore();
-}
-
-function drawTRexLeg(ctx, hx, gy, phase, isBack) {
-  // hx = hip x-centre, gy = ground y (feet level)
-  const hy = gy - 44;
-  const alive = dState !== 'dead';
-  const C  = alive ? '#4a7c3f' : '#943030';
-  const Cd = alive ? '#2e5426' : '#621818';
-
-  let kx, ky, ax, ay;
-
-  if (phase === 2) {                      // airborne — tucked
-    kx = hx+4;  ky = hy+20; ax = kx-4; ay = ky+18;
-  } else if (!isBack) {                   // front (near) leg
-    if (phase === 0) { kx=hx+10; ky=hy+22; ax=kx+8; ay=ky+18; }
-    else             { kx=hx-4;  ky=hy+24; ax=kx-6; ay=ky+16; }
-  } else {                                // back (far) leg
-    if (phase === 0) { kx=hx-4;  ky=hy+24; ax=kx-8; ay=ky+16; }
-    else             { kx=hx+8;  ky=hy+22; ax=kx+6; ay=ky+18; }
-  }
-  if (ay > gy - 4) ay = gy - 4;
-
-  const col = isBack ? Cd : C;
-  const fwd = kx >= hx ? 1 : -1;         // which way foot faces
-
-  // upper thigh
-  ctx.fillStyle = col;
-  ctx.beginPath();
-  ctx.moveTo(hx-10, hy+2);
-  ctx.lineTo(kx-7,  ky);
-  ctx.lineTo(kx+7,  ky);
-  ctx.lineTo(hx+10, hy+2);
-  ctx.fill();
-
-  // knee bump
-  ctx.beginPath();
-  ctx.arc(kx, ky, 7, 0, Math.PI * 2);
-  ctx.fill();
-
-  // lower shin
-  ctx.beginPath();
-  ctx.moveTo(kx-5, ky+2);
-  ctx.lineTo(ax-4, ay);
-  ctx.lineTo(ax+4, ay);
-  ctx.lineTo(kx+5, ky+2);
-  ctx.fill();
-
-  // three-toed foot
-  ctx.beginPath();
-  ctx.moveTo(ax-5, ay+2);
-  ctx.lineTo(ax + fwd*22, gy+2);
-  ctx.lineTo(ax + fwd*16, gy+6);
-  ctx.lineTo(ax,          gy+5);
-  ctx.lineTo(ax - fwd*10, gy+3);
-  ctx.lineTo(ax-5, ay+2);
-  ctx.fill();
-
-  // claw tips (front, middle, rear toe)
-  ctx.fillStyle = '#c8c8a8';
-  ctx.beginPath();
-  ctx.moveTo(ax + fwd*22, gy+2);
-  ctx.lineTo(ax + fwd*28, gy-2);
-  ctx.lineTo(ax + fwd*22, gy+6);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(ax, gy+5);
-  ctx.lineTo(ax + fwd*6, gy+1);
-  ctx.lineTo(ax, gy+9);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(ax - fwd*10, gy+3);
-  ctx.lineTo(ax - fwd*16, gy);
-  ctx.lineTo(ax - fwd*10, gy+7);
-  ctx.fill();
-}
 
 function drawCactus(o) {
   const ctx = dctx;
