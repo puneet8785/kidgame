@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Color Game for Kids!</title>
+  <title>Colors &amp; Shapes for Kids!</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -17,68 +17,122 @@
       justify-content: center;
       overflow: hidden;
       user-select: none;
+      padding: 16px;
     }
 
-    h1 {
-      font-size: clamp(1.8rem, 6vw, 3rem);
+    /* ---- Screens ---- */
+    .screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      gap: 14px;
+      text-align: center;
+    }
+    .screen.active { display: flex; }
+
+    /* ---- Titles ---- */
+    .big-title {
+      font-size: clamp(2rem, 7vw, 3.2rem);
       color: #6a1b9a;
       text-shadow: 3px 3px 0 #ce93d8;
-      margin-bottom: 8px;
       animation: bounce 2s infinite;
     }
-
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(-8px); }
     }
 
+    .sub-title {
+      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      color: #666;
+    }
+
+    /* ---- Home mode buttons ---- */
+    .mode-btn {
+      width: min(82vw, 290px);
+      padding: 24px 20px;
+      border: none;
+      border-radius: 24px;
+      font-size: clamp(1.4rem, 5.5vw, 2rem);
+      font-family: inherit;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.12s, box-shadow 0.12s;
+      letter-spacing: 1px;
+    }
+    .mode-btn:active { transform: translateY(5px); }
+    .mode-btn:hover  { transform: translateY(-4px); }
+    .mode-btn.colors-btn {
+      background: linear-gradient(135deg, #ff7043, #e53935);
+      box-shadow: 0 8px 0 #b71c1c;
+    }
+    .mode-btn.shapes-btn {
+      background: linear-gradient(135deg, #5c6bc0, #283593);
+      box-shadow: 0 8px 0 #1a237e;
+    }
+
+    /* ---- Score board ---- */
     #score-board {
-      font-size: clamp(1rem, 3vw, 1.4rem);
+      font-size: clamp(1rem, 3.5vw, 1.3rem);
       color: #555;
-      margin-bottom: 20px;
     }
+    #score-board strong { color: #e91e63; }
 
-    #score-board span { font-weight: bold; color: #e91e63; }
-
-    /* ---- Question area ---- */
+    /* ---- Question ---- */
     #question {
-      font-size: clamp(1.4rem, 5vw, 2.2rem);
+      font-size: clamp(1.3rem, 5vw, 2rem);
       color: #333;
-      margin-bottom: 18px;
-      text-align: center;
     }
 
-    #color-blob {
-      width: clamp(130px, 30vw, 220px);
-      height: clamp(130px, 30vw, 220px);
-      border-radius: 50%;
-      border: 8px solid rgba(255,255,255,0.8);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-      margin: 0 auto 28px;
-      transition: transform 0.3s;
+    /* ---- Display area ---- */
+    #display-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       animation: wobble 3s infinite;
     }
-
     @keyframes wobble {
       0%, 100% { transform: scale(1) rotate(0deg); }
       25%       { transform: scale(1.05) rotate(3deg); }
       75%       { transform: scale(1.05) rotate(-3deg); }
     }
 
-    /* ---- Answer buttons ---- */
+    #color-blob {
+      width: clamp(120px, 28vw, 200px);
+      height: clamp(120px, 28vw, 200px);
+      border-radius: 50%;
+      border: 8px solid rgba(255,255,255,0.85);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    }
+
+    #shape-svg {
+      width: clamp(140px, 32vw, 210px);
+      height: clamp(140px, 32vw, 210px);
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.3));
+    }
+
+    /* ---- Choice buttons ---- */
     #choices {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      width: min(90vw, 420px);
-      margin-bottom: 24px;
+      gap: 12px;
+      width: min(94vw, 420px);
     }
 
     .choice-btn {
-      padding: 18px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 8px;
       border: none;
       border-radius: 18px;
-      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      font-size: clamp(1rem, 3.8vw, 1.35rem);
       font-family: inherit;
       font-weight: bold;
       color: #fff;
@@ -87,50 +141,53 @@
       box-shadow: 0 6px 0 rgba(0,0,0,0.25);
       transition: transform 0.1s, box-shadow 0.1s;
       letter-spacing: 1px;
+      min-height: 76px;
+    }
+    .choice-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+    .choice-btn:hover  { transform: translateY(-3px) scale(1.04); box-shadow: 0 10px 0 rgba(0,0,0,0.2); }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      display: block;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
     }
 
-    .choice-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0 rgba(0,0,0,0.25);
-    }
-
-    .choice-btn:hover {
-      transform: translateY(-3px) scale(1.04);
-      box-shadow: 0 10px 0 rgba(0,0,0,0.2);
-    }
-
-    /* ---- Feedback banner ---- */
+    /* ---- Feedback ---- */
     #feedback {
-      font-size: clamp(1.4rem, 5vw, 2.2rem);
-      min-height: 2.8rem;
-      text-align: center;
-      transition: opacity 0.4s;
+      font-size: clamp(1.3rem, 5vw, 2rem);
+      min-height: 2.6rem;
     }
-
     .feedback-correct { color: #2e7d32; }
     .feedback-wrong   { color: #c62828; }
 
-    /* ---- Next button ---- */
-    #next-btn {
-      display: none;
-      margin-top: 16px;
-      padding: 14px 40px;
-      font-size: clamp(1rem, 3.5vw, 1.4rem);
+    /* ---- Shared action buttons ---- */
+    .action-btn {
+      padding: 14px 38px;
+      font-size: clamp(1rem, 3.5vw, 1.3rem);
       font-family: inherit;
       font-weight: bold;
-      background: linear-gradient(135deg, #ab47bc, #7b1fa2);
       color: #fff;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 6px 0 #4a148c;
       transition: transform 0.1s, box-shadow 0.1s;
     }
+    .action-btn:active { transform: translateY(4px); }
+    .action-btn:hover  { transform: translateY(-2px); }
+    .purple { background: linear-gradient(135deg,#ab47bc,#7b1fa2); box-shadow: 0 6px 0 #4a148c; }
+    .teal   { background: linear-gradient(135deg,#26c6da,#00838f); box-shadow: 0 6px 0 #006064; }
+    .orange { background: linear-gradient(135deg,#ffa726,#e65100); box-shadow: 0 6px 0 #bf360c; }
 
-    #next-btn:active  { transform: translateY(4px); box-shadow: 0 2px 0 #4a148c; }
-    #next-btn:hover   { transform: translateY(-2px); }
+    /* ---- End screen ---- */
+    #end-title {
+      font-size: clamp(2rem, 7vw, 3rem);
+      color: #6a1b9a;
+      text-shadow: 3px 3px 0 #ce93d8;
+    }
+    #end-msg { font-size: clamp(1.1rem, 4vw, 1.5rem); color: #555; }
 
-    /* ---- Celebration confetti ---- */
+    /* ---- Confetti ---- */
     .confetti-piece {
       position: fixed;
       top: -20px;
@@ -140,67 +197,45 @@
       animation: fall linear forwards;
       pointer-events: none;
     }
-
     @keyframes fall {
       to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
-
-    /* ---- End screen ---- */
-    #end-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 18px;
-      text-align: center;
-    }
-
-    #end-screen h2 {
-      font-size: clamp(2rem, 7vw, 3.5rem);
-      color: #6a1b9a;
-      text-shadow: 3px 3px 0 #ce93d8;
-    }
-
-    #end-screen p  { font-size: clamp(1.1rem, 4vw, 1.6rem); color: #555; }
-
-    #play-again-btn {
-      padding: 16px 50px;
-      font-size: clamp(1.1rem, 4vw, 1.6rem);
-      font-family: inherit;
-      font-weight: bold;
-      background: linear-gradient(135deg, #26c6da, #00838f);
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      box-shadow: 0 6px 0 #006064;
-      transition: transform 0.1s;
-    }
-    #play-again-btn:active { transform: translateY(4px); }
-    #play-again-btn:hover  { transform: translateY(-2px); }
   </style>
 </head>
 <body>
 
-<h1>🎨 Find the Color!</h1>
-<div id="score-board">Stars: <span id="stars">⭐</span> &nbsp;|&nbsp; Round: <span id="round-num">1</span> / 10</div>
-
-<!-- Game area -->
-<div id="game-area">
-  <div id="question">What color is this?</div>
-  <div id="color-blob"></div>
-  <div id="choices"></div>
-  <div id="feedback"></div>
-  <button id="next-btn" onclick="nextRound()">Next ➜</button>
+<!-- HOME SCREEN -->
+<div id="home-screen" class="screen active">
+  <h1 class="big-title">Let's Learn! 🌈</h1>
+  <p class="sub-title">What do you want to learn today?</p>
+  <button class="mode-btn colors-btn" onclick="startGame('colors')">🎨 Colors</button>
+  <button class="mode-btn shapes-btn" onclick="startGame('shapes')">🔷 Shapes</button>
 </div>
 
-<!-- End screen -->
-<div id="end-screen">
-  <h2 id="end-title"></h2>
+<!-- GAME SCREEN -->
+<div id="game-screen" class="screen">
+  <h1 id="game-title" class="big-title"></h1>
+  <div id="score-board">
+    ⭐ <strong id="stars-count">0</strong> stars &nbsp;|&nbsp;
+    Round <strong id="round-num">1</strong> / 10
+  </div>
+  <div id="question"></div>
+  <div id="display-area"></div>
+  <div id="choices"></div>
+  <div id="feedback"></div>
+  <button id="next-btn" class="action-btn purple" style="display:none" onclick="nextRound()">Next ➜</button>
+</div>
+
+<!-- END SCREEN -->
+<div id="end-screen" class="screen">
+  <div id="end-title"></div>
   <p id="end-msg"></p>
-  <button id="play-again-btn" onclick="startGame()">Play Again! 🎮</button>
+  <button class="action-btn teal"   onclick="playAgain()">Play Again! 🎮</button>
+  <button class="action-btn orange" onclick="showHome()">Try Other Game 🔄</button>
 </div>
 
 <script>
+  // ---- Color data ----
   const COLORS = [
     { name: 'Red',    hex: '#e53935' },
     { name: 'Blue',   hex: '#1e88e5' },
@@ -211,56 +246,68 @@
     { name: 'Pink',   hex: '#e91e8c' },
     { name: 'Brown',  hex: '#795548' },
     { name: 'Black',  hex: '#212121' },
-    { name: 'White',  hex: '#f5f5f5', dark: true },
+    { name: 'White',  hex: '#f5f5f5', darkText: true },
   ];
 
-  const TOTAL_ROUNDS = 10;
-  let round = 0;
-  let score = 0;
+  // ---- Shape data — SVG paths in a 100×100 viewBox ----
+  const SHAPES = [
+    { name: 'Circle',    svg: '<circle cx="50" cy="50" r="44"/>' },
+    { name: 'Square',    svg: '<rect x="6" y="6" width="88" height="88" rx="6"/>' },
+    { name: 'Triangle',  svg: '<polygon points="50,5 95,95 5,95"/>' },
+    { name: 'Rectangle', svg: '<rect x="4" y="22" width="92" height="56" rx="6"/>' },
+    { name: 'Star',      svg: '<polygon points="50,5 61,35 93,36 67,56 76,86 50,68 24,86 33,56 7,36 39,35"/>' },
+    { name: 'Heart',     svg: '<path d="M50,82 C12,56 4,36 4,24 C4,13 13,4 26,4 C35,4 44,10 50,19 C56,10 65,4 74,4 C87,4 96,13 96,24 C96,36 88,56 50,82Z"/>' },
+    { name: 'Diamond',   svg: '<polygon points="50,5 95,50 50,95 5,50"/>' },
+    { name: 'Oval',      svg: '<ellipse cx="50" cy="50" rx="44" ry="28"/>' },
+  ];
+
+  const BRIGHT_FILLS  = ['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#e91e8c','#00897b','#ff7043','#26c6da','#fdd835'];
+  const BTN_COLORS    = ['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#00897b'];
+
+  // ---- State ----
+  let currentMode = null;
+  let round = 0, score = 0;
   let answered = false;
   let queue = [];
+  const TOTAL_ROUNDS = 10;
 
-  // ---- Audio helpers (Web Audio API) ----
+  // ---- Screen helpers ----
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  function showHome() { showScreen('home-screen'); }
+
+  // ---- Audio (Web Audio API) ----
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
-  let ctx;
-
-  function ensureAudio() {
-    if (!ctx) ctx = new AudioCtx();
-  }
-
-  function playTone(freq, type, duration, startVol = 0.3) {
+  let audioCtx;
+  function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+  function playTone(freq, type, dur, vol = 0.3) {
     ensureAudio();
-    const osc  = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
     osc.type = type;
-    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    gain.gain.setValueAtTime(startVol, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-    osc.start();
-    osc.stop(ctx.currentTime + duration);
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    osc.start(); osc.stop(audioCtx.currentTime + dur);
   }
-
   function playSuccess() {
-    [523, 659, 784, 1047].forEach((f, i) => {
-      setTimeout(() => playTone(f, 'sine', 0.25, 0.35), i * 100);
-    });
+    [523,659,784,1047].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.25,0.35), i*100));
   }
-
   function playWrong() {
-    playTone(220, 'square', 0.3, 0.2);
-    setTimeout(() => playTone(196, 'square', 0.3, 0.2), 180);
+    playTone(220,'square',0.3,0.2);
+    setTimeout(() => playTone(196,'square',0.3,0.2), 180);
   }
 
   // ---- Confetti ----
   function confetti() {
-    const colors = ['#f44336','#2196f3','#4caf50','#ffeb3b','#ff9800','#9c27b0','#e91e63'];
+    const cols = ['#f44336','#2196f3','#4caf50','#ffeb3b','#ff9800','#9c27b0','#e91e63'];
     for (let i = 0; i < 55; i++) {
       const el = document.createElement('div');
       el.className = 'confetti-piece';
-      el.style.left       = Math.random() * 100 + 'vw';
-      el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.background = cols[Math.floor(Math.random() * cols.length)];
       el.style.animationDuration = (1.5 + Math.random() * 2) + 's';
       el.style.animationDelay    = (Math.random() * 0.5) + 's';
       document.body.appendChild(el);
@@ -268,123 +315,137 @@
     }
   }
 
-  // ---- Shuffle helper ----
+  // ---- Shuffle ----
   function shuffle(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+    const a = [...arr];
+    for (let i = a.length-1; i > 0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
     }
-    return arr;
+    return a;
   }
 
-  // ---- Build round queue (no back-to-back repeats) ----
-  function buildQueue() {
+  function buildQueue(dataset) {
     const q = [];
-    while (q.length < TOTAL_ROUNDS) {
-      const batch = shuffle([...COLORS]);
-      batch.forEach(c => { if (q.length < TOTAL_ROUNDS) q.push(c); });
-    }
+    while (q.length < TOTAL_ROUNDS)
+      shuffle(dataset).forEach(x => { if (q.length < TOTAL_ROUNDS) q.push(x); });
     return q;
   }
 
-  // ---- Start / restart ----
-  function startGame() {
-    round = 0;
-    score = 0;
-    queue = buildQueue();
-    document.getElementById('end-screen').style.display   = 'none';
-    document.getElementById('game-area').style.display    = 'block';
-    document.getElementById('stars').textContent = '⭐';
+  // ---- Start game ----
+  function startGame(mode) {
+    currentMode = mode;
+    round = 0; score = 0; answered = false;
+    queue = buildQueue(mode === 'colors' ? COLORS : SHAPES);
+    document.getElementById('game-title').textContent = mode === 'colors' ? '🎨 Colors!' : '🔷 Shapes!';
+    document.getElementById('stars-count').textContent = '0';
+    showScreen('game-screen');
     nextRound();
   }
+  function playAgain() { startGame(currentMode); }
 
   // ---- Load a round ----
   function nextRound() {
     if (round >= TOTAL_ROUNDS) { showEnd(); return; }
     answered = false;
-
     document.getElementById('next-btn').style.display = 'none';
-    document.getElementById('feedback').textContent   = '';
-    document.getElementById('feedback').className     = '';
-
-    const target = queue[round];
-    document.getElementById('color-blob').style.background = target.hex;
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('feedback').className   = '';
     document.getElementById('round-num').textContent = round + 1;
 
-    // Pick 3 wrong options
-    const others = shuffle(COLORS.filter(c => c.name !== target.name)).slice(0, 3);
-    const options = shuffle([target, ...others]);
+    const target = queue[round++];
+    if (currentMode === 'colors') renderColorRound(target);
+    else renderShapeRound(target);
+  }
 
-    const choicesEl = document.getElementById('choices');
-    choicesEl.innerHTML = '';
+  // ---- Colors round ----
+  function renderColorRound(target) {
+    document.getElementById('question').textContent = 'What color is this?';
+    document.getElementById('display-area').innerHTML =
+      `<div id="color-blob" style="background:${target.hex}"></div>`;
+
+    const others  = shuffle(COLORS.filter(c => c.name !== target.name)).slice(0,3);
+    const options = shuffle([target, ...others]);
+    const box = document.getElementById('choices');
+    box.innerHTML = '';
     options.forEach(opt => {
       const btn = document.createElement('button');
-      btn.className        = 'choice-btn';
-      btn.textContent      = opt.name;
+      btn.className   = 'choice-btn';
+      btn.textContent = opt.name;
       btn.style.background = opt.hex;
-      if (opt.dark) { btn.style.color = '#333'; btn.style.textShadow = 'none'; btn.style.border = '3px solid #ccc'; }
+      if (opt.darkText) { btn.style.color='#333'; btn.style.textShadow='none'; btn.style.border='3px solid #ccc'; }
       btn.onclick = () => handleAnswer(btn, opt.name === target.name, target.name);
-      choicesEl.appendChild(btn);
+      box.appendChild(btn);
     });
+  }
 
-    round++;
+  // ---- Shapes round ----
+  function renderShapeRound(target) {
+    document.getElementById('question').textContent = 'What shape is this?';
+    const fill = BRIGHT_FILLS[Math.floor(Math.random() * BRIGHT_FILLS.length)];
+    document.getElementById('display-area').innerHTML =
+      `<svg id="shape-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+         <g fill="${fill}" stroke="white" stroke-width="3">${target.svg}</g>
+       </svg>`;
+
+    const others  = shuffle(SHAPES.filter(s => s.name !== target.name)).slice(0,3);
+    const options = shuffle([target, ...others]);
+    const box = document.getElementById('choices');
+    box.innerHTML = '';
+    options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.style.background = BTN_COLORS[i % BTN_COLORS.length];
+      btn.innerHTML =
+        `<svg class="btn-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+           <g fill="white" stroke="rgba(0,0,0,0.15)" stroke-width="3">${opt.svg}</g>
+         </svg>
+         <span>${opt.name}</span>`;
+      btn.onclick = () => handleAnswer(btn, opt.name === target.name, target.name);
+      box.appendChild(btn);
+    });
   }
 
   // ---- Handle answer ----
   function handleAnswer(btn, correct, correctName) {
     if (answered) return;
     answered = true;
-
-    // Disable all buttons
     document.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents = 'none');
 
     const fb = document.getElementById('feedback');
     if (correct) {
       score++;
-      playSuccess();
-      confetti();
+      playSuccess(); confetti();
       btn.style.outline = '6px solid #00e676';
       fb.textContent = randomPraise();
       fb.className = 'feedback-correct';
-      updateStars();
+      document.getElementById('stars-count').textContent = score;
     } else {
       playWrong();
       btn.style.outline = '6px solid #ff1744';
       fb.textContent = `Oops! It was ${correctName}! 🙂`;
       fb.className = 'feedback-wrong';
-      // Highlight correct answer
       document.querySelectorAll('.choice-btn').forEach(b => {
-        if (b.textContent === correctName) b.style.outline = '6px solid #00e676';
+        const label = b.querySelector('span') || b;
+        if (label.textContent.trim() === correctName) b.style.outline = '6px solid #00e676';
       });
     }
-
     document.getElementById('next-btn').style.display = 'inline-block';
   }
 
-  // ---- Stars display ----
-  function updateStars() {
-    document.getElementById('stars').textContent = '⭐'.repeat(score);
-  }
-
-  // ---- Random praise messages ----
-  const PRAISES = [
-    'Great job! 🎉', 'Awesome! 🌟', 'You rock! 🤩',
-    'Super! 🦄', 'Brilliant! 🏆', 'Wonderful! 🎊',
-    'Amazing! 💫', 'YES! 🥳', 'Perfect! 🌈',
-  ];
-  function randomPraise() {
-    return PRAISES[Math.floor(Math.random() * PRAISES.length)];
-  }
+  // ---- Praise ----
+  const PRAISES = ['Great job! 🎉','Awesome! 🌟','You rock! 🤩','Super! 🦄',
+                   'Brilliant! 🏆','Wonderful! 🎊','Amazing! 💫','YES! 🥳','Perfect! 🌈'];
+  function randomPraise() { return PRAISES[Math.floor(Math.random()*PRAISES.length)]; }
 
   // ---- End screen ----
   function showEnd() {
-    document.getElementById('game-area').style.display  = 'none';
-    document.getElementById('end-screen').style.display = 'flex';
-
+    showScreen('end-screen');
+    const thing = currentMode === 'colors' ? 'color' : 'shape';
     let title, msg;
     if (score === TOTAL_ROUNDS) {
       title = '🏆 Perfect Score!';
-      msg   = `You got all ${TOTAL_ROUNDS} right! You are a color superstar! 🌟`;
+      msg   = `You got all ${TOTAL_ROUNDS} right! You are a ${thing} superstar! 🌟`;
       confetti(); confetti();
     } else if (score >= TOTAL_ROUNDS * 0.7) {
       title = '🎉 Well Done!';
@@ -393,13 +454,9 @@
       title = '😊 Good Try!';
       msg   = `You got ${score} out of ${TOTAL_ROUNDS}. Play again to improve! 🎨`;
     }
-
     document.getElementById('end-title').textContent = title;
     document.getElementById('end-msg').textContent   = msg;
   }
-
-  // ---- Kick off ----
-  startGame();
 </script>
 </body>
 </html>
