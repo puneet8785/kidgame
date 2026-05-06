@@ -292,6 +292,10 @@
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
     osc.start(); osc.stop(audioCtx.currentTime + dur);
   }
+  function vibrate(pattern) {
+    if (navigator.vibrate) navigator.vibrate(pattern);
+  }
+
   function playSuccess() {
     [523,659,784,1047].forEach((f,i) => setTimeout(() => playTone(f,'sine',0.25,0.35), i*100));
   }
@@ -415,13 +419,13 @@
     const fb = document.getElementById('feedback');
     if (correct) {
       score++;
-      playSuccess(); confetti();
+      playSuccess(); confetti(); vibrate([50,30,50]);
       btn.style.outline = '6px solid #00e676';
       fb.textContent = randomPraise();
       fb.className = 'feedback-correct';
       document.getElementById('stars-count').textContent = score;
     } else {
-      playWrong();
+      playWrong(); vibrate([200]);
       btn.style.outline = '6px solid #ff1744';
       fb.textContent = `Oops! It was ${correctName}! 🙂`;
       fb.className = 'feedback-wrong';
